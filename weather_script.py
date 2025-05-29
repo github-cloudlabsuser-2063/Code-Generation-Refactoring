@@ -1,6 +1,7 @@
 # Fetch weather ddata from OpenWeatherMap API and save it to a file
 import requests
 import sys
+from datetime import datetime  # Add this import
 
 def format_weather_data(weather_data):
     if not weather_data:
@@ -40,6 +41,16 @@ if __name__ == "__main__":
         api_key = sys.argv[1]
         city = sys.argv[2]
         output_file = sys.argv[3]
+
+        # Add city and datetime to the output file name
+        now_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+        city_safe = city.replace(" ", "_")
+        file_parts = output_file.rsplit('.', 1)
+        if len(file_parts) == 2:
+            output_file = f"{file_parts[0]}_{city_safe}_{now_str}.{file_parts[1]}"
+        else:
+            output_file = f"{output_file}_{city_safe}_{now_str}"
+
         weather_info = fetch_weather(api_key, city)
         if weather_info:
             save_weather_to_file(weather_info, output_file)
