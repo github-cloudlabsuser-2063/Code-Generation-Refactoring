@@ -1,5 +1,6 @@
 # Fetch weather ddata from OpenWeatherMap API and save it to a file
 import requests
+import sys
 
 def format_weather_data(weather_data):
     if not weather_data:
@@ -31,3 +32,17 @@ def save_weather_to_file(weather_data, filename):
             file.write(weather_data)
     except Exception as e:
         print(f"Error saving weather data to file: {e}")
+
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Usage: python weather_script.py <API_KEY> <CITY_NAME> <OUTPUT_FILE>")
+    else:
+        api_key = sys.argv[1]
+        city = sys.argv[2]
+        output_file = sys.argv[3]
+        weather_info = fetch_weather(api_key, city)
+        if weather_info:
+            save_weather_to_file(weather_info, output_file)
+            print(f"Weather data saved to {output_file}")
+        else:
+            print("Failed to fetch weather data.")
